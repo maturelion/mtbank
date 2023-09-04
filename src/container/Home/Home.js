@@ -103,8 +103,8 @@ const Home = () => {
                 />
               </svg>
             }
-            linkName="Create"
-            link="/new-pocket"
+            // linkName="Create"
+            // link="/new-pocket"
           />
           <CreditCards pockets={pockets.slice(0, 2)} />
           {pockets.length > 2 && <Link
