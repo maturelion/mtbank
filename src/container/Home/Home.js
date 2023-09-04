@@ -18,7 +18,7 @@ const Home = () => {
 
 
   const { user } = useSelector((state) => state.user);
-  const { balance } = useSelector((state) => state.wallet);
+  const { balance, loadingBalance } = useSelector((state) => state.wallet);
 
   useEffect(() => {
     dispatch(getUserBalance({ user }));
@@ -95,7 +95,7 @@ const Home = () => {
         }
       />
       <HomeStyle>
-        <MyBalance balance={balance} />
+        <MyBalance balance={balance} loadingBalance={loadingBalance} />
         <Feature />
         <Offer />
         <PocketSection>

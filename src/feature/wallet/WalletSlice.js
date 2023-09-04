@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getUserBalance } from "./WalletActions";
 
 const initialState = {
-    loading: false,
+    loadingBalance: false,
     balance: 0, // for wallet array
     error: null,
     success: false, // for monitoring the registration process.
@@ -16,7 +16,7 @@ const walletSlice = createSlice({
         [getUserBalance.fulfilled]: (state, {payload}) => {
             state.loading = false
             state.success = true
-            state.balance = payload.data.balance
+            state.balance = payload
         },
         [getUserBalance.pending]: (state, {payload}) => {
             state.loading = true

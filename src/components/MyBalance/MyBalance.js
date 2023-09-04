@@ -8,7 +8,7 @@ import {
 import { formatter } from "../../utils.js/currencyFormart";
 
 const MyBalance = (props) => {
-  const { balance } = props;
+  const { balance, loadingBalance } = props;
   const [showBalance, setShowBalance] = useState(true);
 
   return (
@@ -16,8 +16,8 @@ const MyBalance = (props) => {
       <MyBalanceText>Your Balance </MyBalanceText>
       <BalanceEyeContainer>
         <Balance>
-          {showBalance ? (
-            formatter.format(balance)
+          {showBalance && !loadingBalance ? (
+            formatter.format(balance && balance.balance)
           ) : (
             <svg xmlns="http://www.w3.org/2000/svg" width="100" height="50">
               <text x="0" y="60" fontSize="60" fill="black">
