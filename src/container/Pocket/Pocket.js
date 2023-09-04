@@ -1,42 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { PocketStyle } from "./Pocket.styled";
 import CreditCards from "../../components/CreditCards/CreditCards";
 import TopBar from "../../components/TopBar/TopBar";
 import Footer from "../../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserPockets } from "../../feature/pocket/PocketActions";
 
 const Pocket = () => {
-  const navigate = useNavigate()
-  const cardDetails = [
-    {
-      card_name: "Biancaliza",
-      card_number: "1234 5678 9000 0000",
-      card_caption: "Saving Balance",
-      card_balance: 1_000.0,
-      bg_img: "img/credit-card-bg1.png",
-    },
-    {
-      card_name: "Biancaliza",
-      card_number: "1234 5678 9000 0001",
-      card_caption: "Family Balance",
-      card_balance: 1_500.0,
-      bg_img: "img/credit-card-bg2.png",
-    },
-    {
-      card_name: "Biancaliza",
-      card_number: "1234 5678 9000 0002",
-      card_caption: "Investment Balance",
-      card_balance: 10_000.0,
-      bg_img: "img/credit-card-bg3.png",
-    },
-    {
-      card_name: "Biancaliza",
-      card_number: "1234 5678 9000 0002",
-      card_caption: "Alms Balance",
-      card_balance: 5_000.0,
-      bg_img: "img/credit-card-bg4.png",
-    },
-  ];
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { pockets } = useSelector((state) => state.pocket);
+
+  useEffect(() => {
+    Object.keys(user).length && dispatch(getUserPockets({ user }));
+  }, [dispatch, user]);
 
   return (
     <>
@@ -82,7 +61,7 @@ const Pocket = () => {
       />
       <PocketStyle>
         {/* <Tabs></Tabs> */}
-        <CreditCards cardDetails={cardDetails} />
+        <CreditCards pockets={pockets} />
       </PocketStyle>
       <Footer />
     </>

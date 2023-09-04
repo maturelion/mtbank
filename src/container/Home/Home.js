@@ -12,49 +12,20 @@ import logo from "../../assets/green-logo.png";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserBalance } from "../../feature/wallet/WalletActions";
+import { getUserPockets } from "../../feature/pocket/PocketActions";
 
 const Home = () => {
   const dispatch = useDispatch();
 
-
   const { user } = useSelector((state) => state.user);
   const { balance, loadingBalance } = useSelector((state) => state.wallet);
+  const { pockets } = useSelector((state) => state.pocket);
 
   useEffect(() => {
-    dispatch(getUserBalance({ user }));
+    Object.keys(user).length && dispatch(getUserBalance({ user }));
+    Object.keys(user).length && dispatch(getUserPockets({ user }));
   }, [dispatch, user]);
 
-
-  const cardDetails = [
-    {
-      card_name: "Biancaliza",
-      card_number: "1234 5678 9000 0000",
-      card_caption: "Saving Balance",
-      card_balance: 1_000.0,
-      bg_img: "img/credit-card-bg1.png",
-    },
-    {
-      card_name: "Biancaliza",
-      card_number: "1234 5678 9000 0001",
-      card_caption: "Family Balance",
-      card_balance: 1_500.0,
-      bg_img: "img/credit-card-bg2.png",
-    },
-    {
-      card_name: "Biancaliza",
-      card_number: "1234 5678 9000 0002",
-      card_caption: "Investment Balance",
-      card_balance: 10_000.0,
-      bg_img: "img/credit-card-bg3.png",
-    },
-    {
-      card_name: "Biancaliza",
-      card_number: "1234 5678 9000 0002",
-      card_caption: "Alms Balance",
-      card_balance: 5_000.0,
-      bg_img: "img/credit-card-bg4.png",
-    },
-  ];
   return (
     <>
       <TopBar
@@ -135,8 +106,17 @@ const Home = () => {
             linkName="Create"
             link="/new-pocket"
           />
-          <CreditCards cardDetails={cardDetails} />
-          <Link to="pocket" style={{display: "flex", justifyContent: "center", marginBlockStart: "20px"}}>View more</Link>
+          <CreditCards pockets={pockets.slice(0, 2)} />
+          <Link
+            to="pocket"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginBlockStart: "20px",
+            }}
+          >
+            View more
+          </Link>
         </PocketSection>
         <CurencySection>
           <Subtitle
