@@ -252,8 +252,8 @@ const History = () => {
                 </svg>
               )}
               <div style={{ marginInlineStart: "12px" }}>
-                <div>{history.description}</div>
-                <div>{history.tx_type === "Debit" ? "Out" : "In"} - {monthNames[new Date(history.date).getUTCMonth()]} {new Date(history.date).getDate()}</div>
+                <div style={{marginBlockEnd: "5px"}}>{history.description}</div>
+                <div style={{color: "#B1B1B1", fontSize: "10px"}}>{history.tx_type === "Debit" ? "Out" : "In"} - {monthNames[new Date(history.date).getUTCMonth()]} {new Date(history.date).getDate()}</div>
               </div>
             </div>
             <div>{history.tx_type === "Debit" ? "-" : "+"}{formatter.format(history.amount)}</div>
