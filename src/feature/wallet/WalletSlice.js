@@ -16,7 +16,7 @@ const walletSlice = createSlice({
         [getUserBalance.fulfilled]: (state, {payload}) => {
             state.loading = false
             state.success = true
-            state.balance = payload
+            state.balance = payload[0]
         },
         [getUserBalance.pending]: (state, {payload}) => {
             state.loading = true
