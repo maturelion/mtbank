@@ -14,7 +14,7 @@ export const getUserBalance = createAsyncThunk(
                 },
               }
               const res = await axios.get(
-                `${endPoint}/wallets/${user.id}/`,
+                `${endPoint}/wallets/?user=${user.id}/`,
                 config
               )
               return res.data
