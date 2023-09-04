@@ -107,7 +107,7 @@ const Home = () => {
             link="/new-pocket"
           />
           <CreditCards pockets={pockets.slice(0, 2)} />
-          <Link
+          {pockets.length > 2 && <Link
             to="pocket"
             style={{
               display: "flex",
@@ -116,7 +116,7 @@ const Home = () => {
             }}
           >
             View more
-          </Link>
+          </Link>}
         </PocketSection>
         <CurencySection>
           <Subtitle
