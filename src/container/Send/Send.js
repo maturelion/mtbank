@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   SendButtonWrapper,
   SendForm,
@@ -15,12 +15,23 @@ import * as Yup from "yup";
 import FormError from "../../components/FormError/FormError";
 import { formatter } from "../../utils.js/currencyFormart";
 import Success from "../Success/Success";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserBalance } from "../../feature/wallet/WalletActions";
 
 const Send = () => {
   const navigate = useNavigate();
   const [isFocused, setIsFocused] = useState(false);
   const [step, setStep] = useState(1);
   const [isSent, setIsSent] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.user);
+  const { balance, loadingBalance } = useSelector((state) => state.wallet);
+
+  useEffect(() => {
+    Object.keys(user).length && dispatch(getUserBalance({ user }));
+  }, [dispatch, user]);
 
   const banks = [
     "JPMorgan Chase & Co.",
@@ -46,14 +57,24 @@ const Send = () => {
   ];
 
   const formik = useFormik({
-    initialValues: { bank_name: "", account_number: "", amount: 0 },
+    initialValues: {
+      bank_name: "",
+      account_number: "",
+      routing_number: "",
+      amount: 0,
+    },
     validationSchema: Yup.object({
       bank_name: Yup.string()
         .required("Bank name is required")
-        .max(50, "Bank name must be 50 characters or less"),
+        .max(50, "Bank name must be 50 characters"),
       account_number: Yup.string()
         .required("Account number is required")
-        .max(9, "max digit is 9"),
+        .max(9, "Account number must be 9 digit")
+        .min(9, "Account number must be 9 digit"),
+      routing_number: Yup.string()
+        .required("Routing number is required")
+        .max(9, "Account number must be 9 digit")
+        .min(9, "Account number must be 9 digit"),
       amount: Yup.string()
         .required("Amount is required")
         .max(9, "max digit is 9"),
@@ -61,10 +82,9 @@ const Send = () => {
     onSubmit: (values) => {
       if (step < 2) {
         setStep((step) => step + 1);
-        console.log(values);
       } else {
         setIsSent(true);
-        console.log(values);
+        // console.log(values);
       }
     },
   });
@@ -189,6 +209,20 @@ const Send = () => {
                   formik.errors.account_number ? (
                     <FormError>{formik.errors.account_number}</FormError>
                   ) : null}
+                  <Input
+                    id="routing_number"
+                    name="routing_number"
+                    label="Routing Number"
+                    type="text"
+                    value={formik.values.routing_number}
+                    {...formik.getFieldProps("routing_number")}
+                    pattern="[0-9]*"
+                    inputMode="numeric"
+                  />
+                  {formik.touched.routing_number &&
+                  formik.errors.routing_number ? (
+                    <FormError>{formik.errors.routing_number}</FormError>
+                  ) : null}
                   <SendButtonWrapper>
                     <Button children="Next" type="submit" />
                   </SendButtonWrapper>
@@ -207,7 +241,7 @@ const Send = () => {
                 >
                   <div>Main wallet</div>
                   <h2 style={{ lineHeight: 0 }}>
-                    {formatter.format(2_049_250.0)}
+                    {!loadingBalance && formatter.format(balance.balance)}
                   </h2>
                 </div>
                 <div>Total transfer:</div>
