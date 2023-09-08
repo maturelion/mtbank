@@ -2,6 +2,7 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { setInputError } from "../inputError/inputErrorSlice";
 import { setMessage } from "../message/messageSlice";
+import { resetCheckpoint } from "../security/CheckpointActions";
 
 const endPoint = process.env.REACT_APP_API_URL;
 
@@ -99,18 +100,14 @@ export const changePassword = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   "auth/logout",
-  async ({ empty }, { rejectWithValue }) => {
+  async ({ empty }, thunkApi) => {
     try {
       const allThemes = localStorage.getItem("all-themes");
       localStorage.clear();
       localStorage.setItem("all-themes", allThemes);
+      thunkApi.dispatch(resetCheckpoint({}));
     } catch (error) {
-      // return custom error message from backend if present
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue(error.message);
-      }
+      console.log(error);
     }
   }
 );

@@ -18,7 +18,6 @@ const Footer = () => {
             width="24"
             height="24"
             transform="translate(0.5)"
-            fill="white"
             stroke="none"
           />
           <path
@@ -69,39 +68,20 @@ const Footer = () => {
       ),
     },
     {
-      name: "Inbox",
-      link: "/inbox",
+      name: "Zelle",
+      link: "/zelle",
       icon: (
         <svg
-          width="25"
-          height="24"
-          viewBox="0 0 25 24"
+          width="20"
+          height="25"
+          viewBox="0 0 25 25"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <rect width="25" height="25" rx="5" />
           <path
-            d="M14.5 2H9.5C4.5 2 2.5 4 2.5 9V15C2.5 20 4.5 22 9.5 22H15.5C20.5 22 22.5 20 22.5 15V10"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M19.5 8C21.1569 8 22.5 6.65685 22.5 5C22.5 3.34315 21.1569 2 19.5 2C17.8431 2 16.5 3.34315 16.5 5C16.5 6.65685 17.8431 8 19.5 8Z"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M7.5 13H12.5"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M7.5 17H16.5"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            d="M10.6757 5.75862V3H14.3243V5.75862H18.7838V8.17241L10.6757 17.4828H17.973L20 20.2414H14.3243V23H10.6757V20.2414H5V17.8276L13.5135 8.86207H5.40541V5.75862H10.6757Z"
+            fill="white"
           />
         </svg>
       ),

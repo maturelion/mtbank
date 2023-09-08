@@ -20,6 +20,8 @@ import AuthLayout from "./container/AuthLayout/AuthLayout";
 import favicon from "./assets/favicon.png";
 import NewPocket from "./container/NewPocket/NewPocket";
 import ScrollToTop from "./components/ScrollToTop";
+import Zelle from "./container/Zelle/Zelle";
+import SecurityQuestion from "./container/SecurityQuestion/SecurityQuestion";
 
 function App() {
   const [currentTheme] = useState("light");
@@ -70,9 +72,11 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/request" element={<Request />} />
               <Route path="/send" element={<Send />} />
+              <Route path="/zelle" element={<Zelle />} />
             </Route>
             <Route element={<AuthLayout />}>
               <Route path="/auth" element={<Auth />} />
+              <Route path="/checkpoint" element={<SecurityQuestion />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/verify" element={<Verify />} />

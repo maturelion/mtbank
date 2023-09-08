@@ -302,7 +302,9 @@ const Profile = () => {
                 borderBottom: "1px solid #ECECEC",
                 cursor: "pointer",
               }}
-              onClick={() => navigate(profileLink.link)}
+              onClick={() =>
+                profileLink.link !== undefined && navigate(profileLink.link)
+              }
             >
               <div style={{ display: "flex", alignItems: "center" }}>
                 {profileLink.icon}

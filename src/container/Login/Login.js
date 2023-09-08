@@ -43,7 +43,7 @@ const Login = () => {
         loginUser({ username: values.username, password: values.password })
       )
         .unwrap()
-        .then(() => navigate("/"));
+        .then(() => navigate("/checkpoint"));
     },
   });
 
