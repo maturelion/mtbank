@@ -6,7 +6,7 @@ import Input from "../../components/Input/Input";
 import { formatter } from "../../utils.js/currencyFormart";
 import { useSelector } from "react-redux";
 
-const Cheque = (props) => {
+const Check = (props) => {
   const { formik } = props;
   const { balance, loadingBalance } = useSelector((state) => state.wallet);
   return (
@@ -14,7 +14,7 @@ const Cheque = (props) => {
       onSubmit={formik.handleSubmit}
       style={{ marginBlockStart: "1px" }}
     >
-      <div style={{ textAlign: "center", marginBlock: "5px" }}>Cheque</div>
+      <div style={{ textAlign: "center", marginBlock: "5px" }}>Check</div>
       <div
         style={{
           border: "1px solid #05BE71",
@@ -131,4 +131,4 @@ const Cheque = (props) => {
   );
 };
 
-export default Cheque;
+export default Check;
