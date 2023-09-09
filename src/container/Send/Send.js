@@ -1,62 +1,31 @@
 import React, { useEffect, useState } from "react";
-import {
-  SendButtonWrapper,
-  SendForm,
-  SendH2,
-  SendParagraph,
-  SendStyle,
-} from "./Send.styled";
-import { useNavigate } from "react-router-dom";
+import { SendStyle } from "./Send.styled";
 import TopBar from "../../components/TopBar/TopBar";
-import Input from "../../components/Input/Input";
-import Button from "../../components/Button/Button";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import FormError from "../../components/FormError/FormError";
-import { formatter } from "../../utils.js/currencyFormart";
-import Success from "../Success/Success";
+import Success from "../../container/Success/Success";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserBalance } from "../../feature/wallet/WalletActions";
+import { useNavigate } from "react-router-dom";
+import Ach from "./Ach";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import Billpay from "./Billpay";
+import Cheque from "./Cheque";
 
 const Send = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isFocused, setIsFocused] = useState(false);
+
   const [step, setStep] = useState(1);
   const [isSent, setIsSent] = useState(false);
-
-  const dispatch = useDispatch();
+  const [sendOption, setsendOption] = useState("");
 
   const { user } = useSelector((state) => state.user);
-  const { balance, loadingBalance } = useSelector((state) => state.wallet);
 
   useEffect(() => {
     Object.keys(user).length && dispatch(getUserBalance({ user }));
   }, [dispatch, user]);
 
-  const banks = [
-    "JPMorgan Chase & Co.",
-    "Bank of America",
-    "Wells Fargo & Co.",
-    "Citigroup Inc.",
-    "Goldman Sachs Group, Inc.",
-    "Morgan Stanley",
-    "U.S. Bank",
-    "PNC Financial Services Group",
-    "TD Bank, N.A.",
-    "Capital One Financial Corporation",
-    "Regions Financial Corporation",
-    "SunTrust Bank (now part of Truist Financial Corporation)",
-    "BB&T (now part of Truist Financial Corporation)",
-    "Fifth Third Bank",
-    "KeyBank",
-    "M&T Bank",
-    "Santander Bank",
-    "Citizens Bank",
-    "Comerica Bank",
-    "Huntington Bank",
-  ];
-
-  const formik = useFormik({
+  const achFormik = useFormik({
     initialValues: {
       bank_name: "",
       account_number: "",
@@ -84,22 +53,192 @@ const Send = () => {
         setStep((step) => step + 1);
       } else {
         setIsSent(true);
-        // console.log(values);
       }
     },
   });
 
+  const bill_payFormik = useFormik({
+    initialValues: {
+      account_number: "",
+      address: "",
+      amount: "",
+    },
+    validationSchema: Yup.object({
+      account_number: Yup.string()
+        .required("Account number is required")
+        .max(9, "Account number must be 9 digit")
+        .min(9, "Account number must be 9 digit"),
+      address: Yup.string().required("Address number is required"),
+      amount: Yup.string()
+        .required("Amount is required")
+        .max(9, "max digit is 9"),
+    }),
+    onSubmit: (values) => {
+      setIsSent(true);
+    },
+  });
+
+  const checkFormik = useFormik({
+    initialValues: {
+      account_number: "",
+      routing_number: "",
+      amount: 0,
+    },
+    validationSchema: Yup.object({
+      account_number: Yup.string()
+        .required("Account number is required")
+        .max(9, "Account number must be 9 digit")
+        .min(9, "Account number must be 9 digit"),
+      routing_number: Yup.string().required(
+        "Routing number number is required"
+      ),
+      amount: Yup.string()
+        .required("Amount is required")
+        .max(9, "max digit is 9"),
+    }),
+    onSubmit: (values) => {
+      setIsSent(true);
+    },
+  });
+
+  const sendOptions = [
+    {
+      name: "ACH",
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.5 13.75C9.5 14.72 10.25 15.5 11.17 15.5H13.05C13.85 15.5 14.5 14.82 14.5 13.97C14.5 13.06 14.1 12.73 13.51 12.52L10.5 11.47C9.91 11.26 9.51001 10.94 9.51001 10.02C9.51001 9.17999 10.16 8.48999 10.96 8.48999H12.84C13.76 8.48999 14.51 9.26999 14.51 10.24"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M12 7.5V16.5"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M22 6V2H18"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M17 7L22 2"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      ),
+      option: "ach",
+    },
+    {
+      name: "Bill pay",
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M19.2899 9.17005L7.6999 3.07005C4.9499 1.62005 1.9599 4.55005 3.3499 7.33005L4.9699 10.57C5.4199 11.47 5.4199 12.53 4.9699 13.43L3.3499 16.67C1.9599 19.45 4.9499 22.37 7.6999 20.93L19.2899 14.83C21.5699 13.63 21.5699 10.37 19.2899 9.17005Z"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M4.97015 13.4299L3.35015 16.6699C1.96015 19.4499 4.95015 22.3699 7.70015 20.9299"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      ),
+      option: "bill_pay",
+    },
+    {
+      name: "Cheque",
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.67188 14.3298C8.67188 15.6198 9.66188 16.6598 10.8919 16.6598H13.4019C14.4719 16.6598 15.3419 15.7498 15.3419 14.6298C15.3419 13.4098 14.8119 12.9798 14.0219 12.6998L9.99187 11.2998C9.20187 11.0198 8.67188 10.5898 8.67188 9.36984C8.67188 8.24984 9.54187 7.33984 10.6119 7.33984H13.1219C14.3519 7.33984 15.3419 8.37984 15.3419 9.66984"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M12 6V18"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M15 22H9C4 22 2 20 2 15V9C2 4 4 2 9 2H15C20 2 22 4 22 9V15C22 20 20 22 15 22Z"
+            stroke="#05BE71"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      ),
+      option: "cheque",
+    },
+  ];
+
   return (
     <>
       {isSent ? (
-        <Success amount={formik.values.amount} />
+        <Success
+          amount={achFormik.values.amount | bill_payFormik.values.amount | checkFormik.values.amount}
+        />
       ) : (
         <>
           <TopBar
             left={
               <svg
                 onClick={() => {
-                  step === 1 ? navigate(-1) : setStep((step) => step - 1);
+                  if (sendOption === "" && step === 1) {
+                    navigate(-1);
+                  } else if (sendOption === "ach" && step === 1) {
+                    setsendOption("");
+                  } else if (sendOption === "bill_pay" && step === 1) {
+                    setsendOption("");
+                  } else if (sendOption === "cheque" && step === 1) {
+                    setsendOption("");
+                  } else {
+                    setStep((step) => step - 1);
+                  }
                 }}
                 width="24"
                 height="24"
@@ -137,188 +276,65 @@ const Send = () => {
             right={""}
           />
           <SendStyle>
-            {step === 1 && (
-              <>
-                <SendH2>Account</SendH2>
-                <SendParagraph>
-                  Create an account and enjoy the benefits we provide for you
-                </SendParagraph>
-                <SendForm onSubmit={formik.handleSubmit}>
-                  <Input
-                    id="bank_name"
-                    name="bank_name"
-                    label="Bank Name"
-                    type="text"
-                    autoComplete="off"
-                    value={formik.values.bank_name}
-                    {...formik.getFieldProps("bank_name")}
-                    onFocus={() => setIsFocused(true)}
-                  />
-                  {formik.touched.bank_name && formik.errors.bank_name ? (
-                    <FormError>{formik.errors.bank_name}</FormError>
-                  ) : null}
-                  {isFocused && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        marginBlockStart: "-35px",
-                        zIndex: 2,
-                        backgroundColor: "#fff",
-                        width: "100%",
-                        maxHeight: "100px",
-                        overflowY: "scroll",
-                        border: "1px solid #ECECEC",
-                        borderRadius: "8px",
-                      }}
-                    >
-                      {banks
-                        .filter((bank) =>
-                          bank
-                            .toLowerCase()
-                            .includes(formik.values.bank_name.toLowerCase())
-                        )
-                        .map((bank_name, index) => (
-                          <div
-                            key={index}
-                            style={{
-                              padding: "5px 10px",
-                              cursor: "pointer",
-                              borderBottom: "1px solid #ECECEC",
-                            }}
-                            onClick={() => {
-                              formik.setFieldValue("bank_name", bank_name);
-                              setIsFocused(false);
-                            }}
-                          >
-                            {bank_name}
-                          </div>
-                        ))}
-                    </div>
-                  )}
-                  <Input
-                    id="account_number"
-                    name="account_number"
-                    label="Account"
-                    type="text"
-                    value={formik.values.account_number}
-                    {...formik.getFieldProps("account_number")}
-                    pattern="[0-9]*"
-                    inputMode="numeric"
-                  />
-                  {formik.touched.account_number &&
-                  formik.errors.account_number ? (
-                    <FormError>{formik.errors.account_number}</FormError>
-                  ) : null}
-                  <Input
-                    id="routing_number"
-                    name="routing_number"
-                    label="Routing Number"
-                    type="text"
-                    value={formik.values.routing_number}
-                    {...formik.getFieldProps("routing_number")}
-                    pattern="[0-9]*"
-                    inputMode="numeric"
-                  />
-                  {formik.touched.routing_number &&
-                  formik.errors.routing_number ? (
-                    <FormError>{formik.errors.routing_number}</FormError>
-                  ) : null}
-                  <SendButtonWrapper>
-                    <Button children="Next" type="submit" />
-                  </SendButtonWrapper>
-                </SendForm>
-              </>
-            )}
-            {step === 2 && (
-              <SendForm onSubmit={formik.handleSubmit}>
+            {sendOption === "" ? (
+              sendOptions.map((option, index) => (
                 <div
+                  key={index}
                   style={{
-                    border: "1px solid #05BE71",
-                    borderRadius: "8px",
-                    padding: "16px 12px",
-                    marginBlockEnd: "40px",
+                    paddingBlock: "15px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    borderBottom: "1px solid #ECECEC",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setsendOption(option.option);
                   }}
                 >
-                  <div>Main wallet</div>
-                  <h2 style={{ lineHeight: 0 }}>
-                    {!loadingBalance && formatter.format(balance.balance)}
-                  </h2>
-                </div>
-                <div>Total transfer:</div>
-                <Input
-                  id="amount"
-                  name="amount"
-                  label="Amount"
-                  type="text"
-                  value={formik.values.account_number}
-                  {...formik.getFieldProps("amount")}
-                  pattern="[0-9]*"
-                  inputMode="numeric"
-                />
-                {formik.touched.account_number &&
-                formik.errors.account_number ? (
-                  <FormError>{formik.errors.account_number}</FormError>
-                ) : null}
-                <SendButtonWrapper>
-                  <div
-                    style={{
-                      backgroundColor: "#05BE7150",
-                      height: "98px",
-                      display: "flex",
-                      alignItems: "center",
-                      paddingInline: "33px",
-                      position: "relative",
-                    }}
-                  >
-                    <svg
-                      style={{ position: "absolute", left: 0 }}
-                      width="140"
-                      height="98"
-                      viewBox="0 0 140 98"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M120.5 99.9999C168.837 31.3935 113.998 -49 64.0002 -49L-126 -49C-124.658 -14.8688 -83.5 10 -126 57.9998C-168.5 106 0.500006 -22.0001 0.500005 2.99987L0.500001 99.9999C0.500001 103.5 89.5 144 120.5 99.9999Z"
-                        fill="#05BE71"
-                        fillOpacity="0.1"
-                      />
-                    </svg>
-
-                    <svg
-                      width="60"
-                      height="60"
-                      viewBox="0 0 60 60"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M26.2254 5.57515L13.7504 10.2751C10.8754 11.3501 8.52539 14.7501 8.52539 17.8001V36.3751C8.52539 39.3251 10.4754 43.2001 12.8504 44.9751L23.6004 53.0001C27.1254 55.6501 32.9254 55.6501 36.4504 53.0001L47.2004 44.9751C49.5754 43.2001 51.5254 39.3251 51.5254 36.3751V17.8001C51.5254 14.7251 49.1754 11.3251 46.3004 10.2501L33.8254 5.57515C31.7004 4.80015 28.3004 4.80015 26.2254 5.57515Z"
-                        stroke="#05BE71"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <path
-                        d="M22.6245 29.6752L26.6495 33.7002L37.3995 22.9502"
-                        stroke="#05BE71"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    <div style={{ marginInlineStart: "12px" }}>
-                      <div style={{ fontSize: "16px", fontWeight: "bold" }}>
-                        Secure Payment
-                      </div>
-                      <p style={{ fontSize: "10px" }}>
-                        We make sure your payment is safe and secure
-                      </p>
-                    </div>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    {option.icon}
+                    <span style={{ marginInlineStart: "10px" }}>
+                      {option.name}
+                    </span>
                   </div>
-                  <Button children="Transfer Now" type="submit" />
-                </SendButtonWrapper>
-              </SendForm>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M5.94006 13.2797L10.2867 8.93306C10.8001 8.41973 10.8001 7.57973 10.2867 7.06639L5.94006 2.71973"
+                      stroke="#B1B1B1"
+                      strokeWidth="1.5"
+                      strokeMiterlimit="10"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M5.94006 13.2803L10.2867 8.93359"
+                      stroke="#B1B1B1"
+                      strokeWidth="1.5"
+                      strokeMiterlimit="10"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              ))
+            ) : sendOption === "ach" ? (
+              <Ach
+                setIsSent={setIsSent}
+                formik={achFormik}
+                step={step}
+                setStep={setStep}
+              />
+            ) : sendOption === "bill_pay" ? (
+              <Billpay formik={bill_payFormik} />
+            ) : (
+              sendOption === "cheque" && <Cheque formik={checkFormik} />
             )}
           </SendStyle>
         </>
