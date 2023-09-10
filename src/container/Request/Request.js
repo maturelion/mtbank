@@ -97,7 +97,7 @@ const Request = () => {
           </svg>
         </div>
         <div>
-          Routing number: 8273 8293 37292{" "}
+          Routing number: 022000046{" "}
           <svg
             width="20"
             height="20"
