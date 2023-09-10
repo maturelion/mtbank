@@ -67,7 +67,7 @@ const Login = () => {
           <Input
             id="username"
             name="username"
-            label="UserId"
+            label="UserID"
             type="text"
             autoComplete="on"
             value={formik.values.username}
