@@ -287,7 +287,7 @@ const Profile = () => {
                 {user.first_name} {user.last_name}
               </div>
               <div style={{ fontSize: "12px", color: "#606060" }}>
-                Platinum Member
+                {user.avatar ? user.avatar : "Platinum Member"}
               </div>
             </div>
           </div>
