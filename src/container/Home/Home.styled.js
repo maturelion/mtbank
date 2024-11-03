@@ -7,5 +7,5 @@ export const HomeStyle = styled.div`
 
 export const PocketSection = styled.div`
 `
-export const CurencySection = styled.div`
+export const CurrencySection = styled.div`
 `

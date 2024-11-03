@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { CurencySection, HomeStyle, PocketSection } from "./Home.styled";
+import { CurrencySection, HomeStyle, PocketSection } from "./Home.styled";
 import CreditCards from "../../components/CreditCards/CreditCards";
 import TopBar from "../../components/TopBar/TopBar";
 import Footer from "../../components/Footer/Footer";
@@ -118,9 +118,9 @@ const Home = () => {
             View more
           </Link>}
         </PocketSection>
-        <CurencySection>
+        <CurrencySection>
           <Subtitle
-            name="Curency"
+            name="Currency"
             icon={
               <svg
                 width="20"
@@ -168,7 +168,7 @@ const Home = () => {
             }
           />
           <Currency />
-        </CurencySection>
+        </CurrencySection>
       </HomeStyle>
       <Footer />
     </>

@@ -23,9 +23,9 @@ const Currency = () => {
           {
             name: "JPY",
           },
-        ].map((curency, index) => (
+        ].map((currency, index) => (
           <CurrencyData key={index}>
-            <div style={{ width: "50px" }}>{curency.name}</div>
+            <div style={{ width: "50px" }}>{currency.name}</div>
             <div style={{ width: "50px" }}>1.00</div>
             <div style={{ width: "50px" }}>loading...</div>
           </CurrencyData>
