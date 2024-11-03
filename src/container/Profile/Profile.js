@@ -272,7 +272,7 @@ const Profile = () => {
               alt=""
               height={50}
               width={50}
-              style={{ borderRadius: "50%", marginInlineEnd: "20px" }}
+              style={{ borderRadius: "50%", marginInlineEnd: "20px", objectFit: "cover" }}
             />
             <div>
               <div
