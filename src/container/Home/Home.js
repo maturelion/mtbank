@@ -29,7 +29,14 @@ const Home = () => {
   return (
     <>
       <TopBar
-        left={<img src={logo} alt="" height={30} width={100} />}
+        left={<div style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "baseline"
+        }}>
+          <img src={logo} alt="" height={30} width={100} />
+
+        </div>}
         right={
           <svg
             width="24"
@@ -66,6 +73,10 @@ const Home = () => {
         }
       />
       <HomeStyle>
+        <div style={{
+          fontWeight: "bold",
+          fontSize: "16px"
+        }}>{user.account_number}</div>
         <MyBalance balance={balance} loadingBalance={loadingBalance} />
         <Feature />
         <Offer />
@@ -103,8 +114,8 @@ const Home = () => {
                 />
               </svg>
             }
-            // linkName="Create"
-            // link="/new-pocket"
+          // linkName="Create"
+          // link="/new-pocket"
           />
           <CreditCards pockets={pockets.slice(0, 2)} />
           {pockets.length > 2 && <Link
