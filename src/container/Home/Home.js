@@ -76,7 +76,7 @@ const Home = () => {
         <div style={{
           fontWeight: "bold",
           fontSize: "16px"
-        }}>{user.account_number}</div>
+        }}>Account number: {user.account_number}</div>
         <MyBalance balance={balance} loadingBalance={loadingBalance} />
         <Feature />
         <Offer />
