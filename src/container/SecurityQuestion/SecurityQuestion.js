@@ -19,6 +19,7 @@ const SecurityQuestion = () => {
   const navigate = useNavigate();
 
   const [incorrectAnswer, setIncorrectAnswer] = useState("");
+  console.log("incorrectAnswer: ", incorrectAnswer)
 
   const { loadingCheckpoint, checkpointQ } = useSelector(
     (state) => state.checkpoint
