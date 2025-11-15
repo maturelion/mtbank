@@ -35,10 +35,13 @@ const SecurityQuestion = () => {
 
       try {
         const res = await dispatch(
-          checkpoint({ user, answer: values.security_answer })
+          checkpoint({ user })
         ).unwrap();
 
-        if (!res || res.correct === false || res.success === false || res === false) {
+        if (res.answer === values.security_answer) {
+          localStorage.setItem("isAuthenticated", true);
+          window.location = "/";
+        } else {
           setIncorrectAnswer("Incorrect answer");
           return;
         }

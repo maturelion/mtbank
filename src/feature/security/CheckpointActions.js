@@ -21,7 +21,7 @@ export const getCheckpointQ = createAsyncThunk(
 
 export const checkpoint = createAsyncThunk(
   "checkpoint",
-  async ({ user, answer }, rejectWithValue) => {
+  async ({ user }, rejectWithValue) => {
     try {
       const config = {
         headers: {
@@ -29,13 +29,7 @@ export const checkpoint = createAsyncThunk(
         },
       };
       const res = await axios.get(`${endPoint}/checkpoints/${user.id}`, config);
-      if (answer === res.data.answer) {
-        localStorage.setItem("isAuthenticated", true);
-        window.location = "/";
-        return true;
-      } else {
-        return false;
-      }
+      return res.data;
     } catch (error) {
       console.log(error);
     }
