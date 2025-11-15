@@ -58,7 +58,8 @@ const SecurityQuestion = () => {
   // Clear error message when user starts typing again
   useEffect(() => {
     if (incorrectAnswer) setIncorrectAnswer("");
-  }, [formik.values.security_answer, incorrectAnswer]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.security_answer]);
 
   // Fetch user, redirect if fails
   useEffect(() => {
