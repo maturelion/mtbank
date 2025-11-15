@@ -31,11 +31,21 @@ const SecurityQuestion = () => {
       security_answer: Yup.string().required("Security answer is required"),
     }),
     onSubmit: async (values) => {
+      setIncorrectAnswer("");
+
       try {
-        await dispatch(
-          checkpoint({ user: user, answer: values.security_answer })
+        const res = await dispatch(
+          checkpoint({ user, answer: values.security_answer })
         ).unwrap();
-      } catch {
+
+        if (!res || res.correct === false || res.success === false || res === false) {
+          setIncorrectAnswer("Incorrect answer");
+          return;
+        }
+
+        // success → you can navigate if needed
+        // navigate("/dashboard");
+      } catch (e) {
         setIncorrectAnswer("Incorrect answer");
       }
     },
