@@ -20,7 +20,7 @@ const SecurityQuestion = () => {
 
   const [incorrectAnswer, setIncorrectAnswer] = useState("");
 
-  const { isAuthenticated, loadingCheckpoint, checkpointQ } = useSelector(
+  const { loadingCheckpoint, checkpointQ } = useSelector(
     (state) => state.checkpoint
   );
   const { user } = useSelector((state) => state.user);
@@ -30,49 +30,56 @@ const SecurityQuestion = () => {
     validationSchema: Yup.object({
       security_answer: Yup.string().required("Security answer is required"),
     }),
-    onSubmit: (values) => {
-      dispatch(checkpoint({ user: user, answer: values.security_answer }))
-        .unwrap()
-        .then()
-        .catch((e) => {
-          console.log(e);
-          setIncorrectAnswer(isAuthenticated === false && "Incorrect answer");
-        });
+    onSubmit: async (values) => {
+      try {
+        await dispatch(
+          checkpoint({ user: user, answer: values.security_answer })
+        ).unwrap();
+      } catch {
+        setIncorrectAnswer("Incorrect answer");
+      }
     },
   });
 
+  // Clear error message when user starts typing again
+  useEffect(() => {
+    if (incorrectAnswer) setIncorrectAnswer("");
+  }, [formik.values.security_answer, incorrectAnswer]);
+
+  // Fetch user, redirect if fails
   useEffect(() => {
     dispatch(getUser({}))
       .unwrap()
-      .then()
       .catch(() => navigate("/login"));
   }, [dispatch, navigate]);
 
+  // Fetch security question once user is loaded
   useEffect(() => {
-    dispatch(getCheckpointQ({ user }));
+    if (user) dispatch(getCheckpointQ({ user }));
   }, [dispatch, user]);
+
+  // Don't render form until user data is ready
+  if (!user) return null;
 
   return (
     <SecurityQuestionStyle>
       <SecurityForm onSubmit={formik.handleSubmit}>
-        <div>{checkpointQ && checkpointQ.question}:</div>
+        <div>{checkpointQ?.question}:</div>
+
         <Input
           id="security_answer"
           name="security_answer"
           label="Security Answer"
           type="text"
           autoComplete="on"
-          value={formik.values.security_answer}
           {...formik.getFieldProps("security_answer")}
         />
+
         <FormError>{incorrectAnswer}</FormError>
+
         <Button disabled={loadingCheckpoint}>
           {loadingCheckpoint ? (
-            <ReactLoading
-              type={"spinningBubbles"}
-              height={"20px"}
-              width={"20px"}
-            />
+            <ReactLoading type="spinningBubbles" height="20px" width="20px" />
           ) : (
             "Submit"
           )}
