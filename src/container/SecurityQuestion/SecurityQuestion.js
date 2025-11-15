@@ -31,8 +31,13 @@ const SecurityQuestion = () => {
       security_answer: Yup.string().required("Security answer is required"),
     }),
     onSubmit: (values) => {
-      dispatch(checkpoint({ user: user, answer: values.security_answer }));
-      setIncorrectAnswer(isAuthenticated === false && "Incorrect answer");
+      dispatch(checkpoint({ user: user, answer: values.security_answer }))
+        .unwrap()
+        .then()
+        .catch((e) => {
+          console.log(e);
+          setIncorrectAnswer(isAuthenticated === false && "Incorrect answer");
+        });
     },
   });
 

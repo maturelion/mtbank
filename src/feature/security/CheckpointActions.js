@@ -34,7 +34,7 @@ export const checkpoint = createAsyncThunk(
         window.location = "/";
         return true;
       } else {
-        return false;
+        throw new Error("Incorrect answer");
       }
     } catch (error) {
       console.log(error);
