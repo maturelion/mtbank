@@ -55,14 +55,14 @@ const Request = () => {
       />
       <RequestStyle>
         <img src={logo} alt="" height={35} width={148} />
-        <StyledChart>
+        {/* <StyledChart>
           <img
             src={`https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl=${user.account_number}&choe=UTF-8`}
             alt="qr"
             height={250}
             width={250}
           />
-        </StyledChart>
+        </StyledChart> */}
         <div>{user.first_name} {user.last_name}</div>
         <div>
           Account number: {user.account_number}{" "}
